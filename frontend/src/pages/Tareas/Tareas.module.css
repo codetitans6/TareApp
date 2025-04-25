@@ -1,0 +1,46 @@
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.gestion {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 70%;
+}
+
+.gestion__titulo {
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.gestion__boton_add {
+    margin: 20px 0;
+    padding: 10px 30px;
+    font-family: Poppins, serif;
+    font-weight: bold;
+    background-color: #047c4c;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td,
+th {
+    border: 1px solid #004907;
+    text-align: center;
+    padding: 8px;
+}
+
+.link {
+    text-decoration: none;
+    color: #fff;
+    align-self: flex-end;
+}
