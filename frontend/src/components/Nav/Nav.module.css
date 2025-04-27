@@ -1,0 +1,32 @@
+.nav {
+    background-color: #239c1d;
+    color: #fff;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5%;
+}
+
+.logo {
+    padding: 10px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav__list {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+.nav__list_item .link {
+    color: #fff;
+    text-decoration: none;
+}
+.nav__list_item .link:hover {
+    color: #1c611a;
+}
