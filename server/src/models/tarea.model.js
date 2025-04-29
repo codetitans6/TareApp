@@ -34,5 +34,5 @@ const tareaSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-const tareas = mongoose.model('Tarea', tareaSchema, 'tarea');
-export default tareas
+const tarea = mongoose.model('Tarea', tareaSchema, 'tarea');
+export default tarea

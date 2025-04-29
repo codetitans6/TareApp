@@ -1,18 +1,18 @@
 import { useState } from 'react'
-import { crearTarea } from '../services/tareaService'
+import { crearUsuario } from '../services/usuarioService'
 
 
-const useCrearTarea = () => {
+const useRegistroUsuario = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
 
-    const submitTarea = async (tareaData, callback) => {
+    const submitUsuarioNuevo = async (usuarioData, callback) => {
         setLoading(true)
         setError(null)
         setSuccess(false)
         try {
-            await crearTarea(tareaData)
+            await crearUsuario(usuarioData)
             setSuccess(true)
             if (callback) callback()
         } catch (error) {
@@ -21,6 +21,6 @@ const useCrearTarea = () => {
             setLoading(false)
         }
     }
-    return { submitTarea, loading, error, success };
+    return { submitUsuarioNuevo, loading, error, success };
 }
-export default useCrearTarea;
+export default useRegistroUsuario;
