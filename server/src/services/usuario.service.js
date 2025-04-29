@@ -9,7 +9,7 @@ const crearUsuario = async (usuarioData) => {
 
     return {
         token,
-        usuario: { idUsuario: usuario._id, nombreUsuario: usuario._id, emailUsuario: usuario.email }
+        usuario: { idUsuario: usuario._id, nombreUsuario: usuario.nombre, emailUsuario: usuario.email }
     }
 }
 
