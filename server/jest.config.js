@@ -1,6 +1,10 @@
 // jest.config.js
-module.exports = {
-    testEnvironment: 'node',
-    roots: ['<rootDir>/src/tests'],
-  };
-  
+const config = {
+  testEnvironment: 'node',
+  roots: ['<rootDir>/src/tests'],
+  transform: {
+    "^.+\\.js$": "babel-jest"
+  }
+};
+
+export default config
