@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-export const usuarioSchema = Joi.object({
+const usuarioSchema = Joi.object({
   nombre: Joi.string()
     .trim()
     .max(50)
@@ -26,3 +26,6 @@ export const usuarioSchema = Joi.object({
       'string.min': 'La contraseña debe tener mínimo 8 caracteres'
     }),
 });
+export {
+  usuarioSchema
+}
