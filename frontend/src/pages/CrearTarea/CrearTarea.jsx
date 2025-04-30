@@ -14,6 +14,11 @@ function CrearTarea() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        // Validación del campo recordatorio
+        if (recordatorio !== 'true' && recordatorio !== 'false') {
+            alert('Por favor selecciona una opción de recordatorio.');
+            return;
+        }
         submitTarea({
             titulo,
             descripcion,
@@ -42,13 +47,31 @@ function CrearTarea() {
                 <h3 className={style.tarea__title}>Crear Tarea</h3>
                 <form className={style.tarea__form} onSubmit={handleSubmit}>
                     <label htmlFor="titulo">Titulo de la tarea</label>
-                    <input className={style.tarea__input} type="text" name="titulo" id="titulo" value={titulo} onChange={(e) => setTitulo(e.target.value)} required />
+                    <input className={style.tarea__input} type="text" maxLength={40} name="titulo" id="titulo" value={titulo} onChange={(e) => {
+                        const regex = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]*$/; // Solo letras y espacios
+                        if (regex.test(e.target.value) || e.target.value === "") {
+                        setTitulo(e.target.value);
+                        }
+                        }}
+                    required />
 
                     <label htmlFor="descripcion">Descripcion</label>
-                    <textarea className={style.tarea__input__textarea} name="descripcion" id="descripcion" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} required />
+                    <textarea className={style.tarea__input__textarea} maxLength={300} name="descripcion" id="descripcion" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} required />
 
                     <label htmlFor="fecha-cierre">Fecha de cierre</label>
-                    <input className={style.tarea__input} type="date" name="fecha-cierre" id="fecha-cierre" value={fechaCierre} onChange={(e) => setFechaCierre(e.target.value)} required />
+                    <input className={style.tarea__input} type="date" name="fecha-cierre" id="fecha-cierre" min={new Date().toISOString().split('T')[0]} value={fechaCierre} onChange={(e) => {
+                            const selectedDate = new Date(e.target.value);
+                            const today = new Date();
+                            today.setHours(0, 0, 0, 0); // Quitar horas para comparar solo fecha
+
+                            if (selectedDate > today) {
+                            setFechaCierre(e.target.value);
+                            } else {
+                            alert('La fecha debe ser posterior a hoy.');
+                            setFechaCierre(""); // Borra la fecha inválida
+                            }
+                        }} 
+                    required />
 
                     <fieldset>
                         <legend>Activar recordatorios:</legend>
