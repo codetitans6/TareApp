@@ -11,7 +11,7 @@ function Nav() {
                 <ul className={style.nav__list}>
                     <li className={style.nav__list_item}><Link to='/' className={style.link}>Home</Link></li>
                     <li className={style.nav__list_item}>Iniciar sesión</li>
-                    <li className={style.nav__list_item}>Registrate</li>
+                    <li className={style.nav__list_item}><Link to='/registro' className={style.link}>Registrate</Link></li>
                     <li className={style.nav__list_item}><Link to='/tareas' className={style.link}>Mis tareas</Link></li>
                 </ul>
             </nav>
