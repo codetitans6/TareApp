@@ -5,6 +5,11 @@ const crearTarea = async (data) => {
   return await nuevaTarea.save();
 };
 
+const getAllTareas = async () => {
+  const tareas = Tarea.find()
+  return await tareas
+}
 export default {
-  crearTarea
+  crearTarea,
+  getAllTareas
 };
