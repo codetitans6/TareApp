@@ -4,6 +4,7 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
+    margin-bottom: 40px;
 }
 
 .goback__button {
@@ -63,4 +64,30 @@
     cursor: pointer;
     font-family: Poppins, serif;
     font-weight: bold;
+}
+.error_form {
+    margin: 0;
+    font-size: 0.8em;
+    color: #ffffff;
+    font-weight: bold;
+    background-color: #b72d2ddc;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 2px
+} 
+.success {
+    margin: 0;
+    font-size: 0.8em;
+    color: #ffffff;
+    font-weight: bold;
+    background-color: #70a327dc;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+justify-content: center;
+margin-bottom: 5px;
 }
