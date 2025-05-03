@@ -1,6 +1,6 @@
 import style from './CrearTarea.module.css'
 import { Link } from 'react-router-dom'
-import {  useState } from 'react'
+import { useState } from 'react'
 import useCrearTarea from '../../hooks/useCrearTarea';
 
 function CrearTarea() {
@@ -45,33 +45,41 @@ function CrearTarea() {
 
             <div className={style.tarea}>
                 <h3 className={style.tarea__title}>Crear Tarea</h3>
+                {success && <p className={style.success}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1.8em" height="1.8em" viewBox="0 0 512 512"><path fill="currentColor" fillRule="evenodd" d="M256 42.667C138.18 42.667 42.667 138.18 42.667 256S138.18 469.334 256 469.334S469.334 373.82 469.334 256S373.821 42.667 256 42.667m0 384c-94.105 0-170.666-76.561-170.666-170.667S161.894 85.334 256 85.334S426.667 161.894 426.667 256S350.106 426.667 256 426.667m80.336-246.886l30.167 30.167l-131.836 132.388l-79.083-79.083l30.166-30.167l48.917 48.917z" /></svg>
+                    Tarea creada correctamente
+                </p>}
+                {error && <p className={style.error_form}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1.8em" height="1.8em" viewBox="0 0 24 24"><path fill="currentColor" d="M11.001 10h2v5h-2zM11 16h2v2h-2z" /><path fill="currentColor" d="M13.768 4.2C13.42 3.545 12.742 3.138 12 3.138s-1.42.407-1.768 1.063L2.894 18.064a1.99 1.99 0 0 0 .054 1.968A1.98 1.98 0 0 0 4.661 21h14.678c.708 0 1.349-.362 1.714-.968a1.99 1.99 0 0 0 .054-1.968zM4.661 19L12 5.137L19.344 19z" /></svg>
+                    {error}
+                </p>}
                 <form className={style.tarea__form} onSubmit={handleSubmit}>
                     <label htmlFor="titulo">Titulo de la tarea</label>
                     <input className={style.tarea__input} type="text" maxLength={40} name="titulo" id="titulo" value={titulo} onChange={(e) => {
                         const regex = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]*$/; // Solo letras y espacios
                         if (regex.test(e.target.value) || e.target.value === "") {
-                        setTitulo(e.target.value);
+                            setTitulo(e.target.value);
                         }
-                        }}
-                    required />
+                    }}
+                        required />
 
                     <label htmlFor="descripcion">Descripcion</label>
                     <textarea className={style.tarea__input__textarea} maxLength={300} name="descripcion" id="descripcion" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} required />
 
                     <label htmlFor="fecha-cierre">Fecha de cierre</label>
                     <input className={style.tarea__input} type="date" name="fecha-cierre" id="fecha-cierre" min={new Date().toISOString().split('T')[0]} value={fechaCierre} onChange={(e) => {
-                            const selectedDate = new Date(e.target.value);
-                            const today = new Date();
-                            today.setHours(0, 0, 0, 0); // Quitar horas para comparar solo fecha
+                        const selectedDate = new Date(e.target.value);
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0); // Quitar horas para comparar solo fecha
 
-                            if (selectedDate > today) {
+                        if (selectedDate > today) {
                             setFechaCierre(e.target.value);
-                            } else {
+                        } else {
                             alert('La fecha debe ser posterior a hoy.');
                             setFechaCierre(""); // Borra la fecha inválida
-                            }
-                        }} 
-                    required />
+                        }
+                    }}
+                        required />
 
                     <fieldset>
                         <legend>Activar recordatorios:</legend>
@@ -95,8 +103,7 @@ function CrearTarea() {
 
                     <input className={style.tarea__input_submit} type="submit" value={loading ? 'Creando...' : 'Crear'} disabled={loading} />
 
-                    {success && <p className={style.success}>Tarea creada correctamente</p>}
-                    {error && <p className={style.error}>{error}</p>}
+
                 </form>
             </div>
         </section>

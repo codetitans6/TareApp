@@ -44,3 +44,8 @@ th {
     color: #fff;
     align-self: flex-end;
 }
+.accion_boton {
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+}
