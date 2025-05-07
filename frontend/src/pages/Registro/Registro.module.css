@@ -46,6 +46,12 @@
     cursor: pointer;
     font-weight: bold;
 }
+.error {
+    margin: 0;
+    font-size: 0.8em;
+    color: #b72d2d;
+    font-weight: bold;
+}
 .error_form {
     margin: 0;
     font-size: 0.8em;
