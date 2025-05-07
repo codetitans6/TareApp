@@ -5,7 +5,8 @@ const registro = async(req, res) => {
     try {
         const resultado = await UsuarioService.crearUsuario(req.body)
         res.status(200).json({
-            usuario: { id: resultado.usuario.idUsuario, nombre: resultado.usuario.nombreUsuario}
+            token: resultado.token,
+            usuario: { id: resultado.usuario.id, nombre: resultado.usuario.nombre}
         })
     } catch (error) {
         if (error.name === 'ValidationError') {
