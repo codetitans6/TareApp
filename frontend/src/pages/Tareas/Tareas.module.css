@@ -49,3 +49,6 @@ th {
     background-color: transparent;
     border: none;
 }
+.prioridad {
+    text-transform: capitalize;
+}
