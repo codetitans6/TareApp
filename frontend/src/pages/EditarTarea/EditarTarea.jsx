@@ -6,6 +6,7 @@ import useEditarTarea from '../../hooks/useEditarTarea';
 
 function EditarTarea() {
     const navigate = useNavigate();
+    const id = localStorage.getItem('id')
     const { tarea, loading, error: fetchError } = useEditarTarea();
     const [titulo, setTitulo] = useState('');
     const [descripcion, setDescripcion] = useState('');
@@ -13,7 +14,6 @@ function EditarTarea() {
     const [recordatorio, setRecordatorio] = useState('false');
     const [prioridad, setPrioridad] = useState('media');
     const [materia, setMateria] = useState('');
-
 
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState('');
@@ -41,6 +41,7 @@ function EditarTarea() {
             recordatorio: recordatorio === 'true',
             prioridad,
             materia,
+            creador: id
         };
 
         try {
