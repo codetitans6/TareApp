@@ -9,4 +9,6 @@ router.get('/', validate(tareaSchema), tareaController.getAllTareas)
 router.get('/:id', validate(tareaSchema), tareaController.getTareaById)
 router.put('/:id', validate(tareaSchema), tareaController.updateTarea)
 
+router.patch('/:id/completar', tareaController.completarTarea);
+
 export default router

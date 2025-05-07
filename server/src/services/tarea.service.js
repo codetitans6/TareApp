@@ -17,9 +17,14 @@ const updateTarea = async (id, data) => {
   return updatedTarea;
 };
 
+const marcarComoCompletada = async (id) => {
+  return await Tarea.findByIdAndUpdate(id, { completada: true }, { new: true });
+};
+
 export default {
   crearTarea,
   getAllTareas,
   getTareaById,
-  updateTarea
+  updateTarea,
+  marcarComoCompletada
 };
