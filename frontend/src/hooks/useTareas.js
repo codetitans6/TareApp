@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
-import { getAllTareas } from '../services/tareaService';
+import { getAllUserTareas } from '../services/tareaService';
 
 const useTareas = () => {
   const [tareas, setTareas] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  const id = localStorage.getItem('id')
   const fetchTareas = async () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await getAllTareas();
+      const data = await getAllUserTareas(id);
       setTareas(data);
     } catch (err) {
       setError('Error al obtener tareas');
