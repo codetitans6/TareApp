@@ -3,13 +3,31 @@ import { Link } from 'react-router-dom'
 import useTareas from '../../hooks/useTareas';
 import { Tooltip } from 'react-tooltip'
 function Tareas() {
+    const completarTarea = async (id) => {
+        try {
+          const response = await fetch(`http://localhost:3001/api/tareas/${id}/completar`, {
+            method: 'PATCH'
+          });
+      
+          if (!response.ok) {
+            throw new Error('No se pudo completar la tarea');
+          }
+      
+          // recarga tareas después de completar
+          window.location.reload(); // o puedes implementar una mejor forma con estado si prefieres
+        } catch (error) {
+          console.error('Error al completar tarea:', error);
+        }
+    };
+    const [verCompletadas, setVerCompletadas] = useState(false);
+    const tareasFiltradas = tareas?.filter(t => t.completada === verCompletadas);
     const { tareas, loading, error } = useTareas();
     if (loading) return <p>Cargando tareas...</p>;
     if (error) return <p>{error}</p>;
     let content;
 
-    if (tareas && tareas.length > 0) {
-        content = tareas.map((tarea) => (
+    if (tareasFiltradas && tareasFiltradas.length > 0) {
+        content = tareasFiltradas.map((tarea) => (
             <tr key={tarea._id}>
                 <td>{tarea.titulo}</td>
                 <td>{new Date(tarea.fechaCierre).toLocaleString('es-ES', {
@@ -17,15 +35,28 @@ function Tareas() {
                     year: 'numeric',
                     month: 'short',
                     day: 'numeric'
-                })} </td>
+                })}</td>
                 <td>{tarea.prioridad}</td>
                 <td>{tarea.materia}</td>
                 <td>{tarea.recordatorio ? 'Activado' : 'Desactivado'}</td>
                 <td>
                     <div>
-                        <button className={style.accion_boton} data-tooltip-id="eliminar" data-tooltip-content="Eliminar tarea" data-tooltip-place="top"><svg xmlns="http://www.w3.org/2000/svg" width="1.6em" height="1.6em" viewBox="0 0 24 24"><path fill="#d06262" d="M19 4h-3.5l-1-1h-5l-1 1H5v2h14M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6z" /></svg></button>
-                        <Link to={`/editar/${tarea._id}`}><button className={style.accion_boton} data-tooltip-id="editar" data-tooltip-content="Editar tarea" data-tooltip-place="top" ><svg xmlns="http://www.w3.org/2000/svg" width="1.6em" height="1.6em" viewBox="0 0 24 24"><g fill="none" stroke="#059669" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path d="M7 7H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0-2.97-2.97L9 12v3h3zM16 5l3 3" /></g></svg></button></Link>
-                        <button className={style.accion_boton} data-tooltip-id="ver" data-tooltip-content="Ver tarea" data-tooltip-place="top" ><svg xmlns="http://www.w3.org/2000/svg" width="1.6em" height="1.6em" viewBox="0 0 24 24"><path fill="#333333" d="M12 9a3 3 0 0 0-3 3a3 3 0 0 0 3 3a3 3 0 0 0 3-3a3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5a5 5 0 0 1 5-5a5 5 0 0 1 5 5a5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5" /></svg></button>
+                        {!tarea.completada && (
+                            <button
+                                className={style.accion_boton}
+                                data-tooltip-id="completar"
+                                data-tooltip-content="Marcar como completada"
+                                data-tooltip-place="top"
+                                onClick={() => completarTarea(tarea._id)}
+                            >
+                                ✅
+                            </button>
+                        )}
+                        <button className={style.accion_boton} data-tooltip-id="eliminar" data-tooltip-content="Eliminar tarea" data-tooltip-place="top">🗑️</button>
+                        <Link to={`/editar/${tarea._id}`}>
+                            <button className={style.accion_boton} data-tooltip-id="editar" data-tooltip-content="Editar tarea" data-tooltip-place="top">✏️</button>
+                        </Link>
+                        <button className={style.accion_boton} data-tooltip-id="ver" data-tooltip-content="Ver tarea" data-tooltip-place="top">👁️</button>
                     </div>
                 </td>
             </tr>
@@ -33,10 +64,13 @@ function Tareas() {
     } else {
         content = (
             <tr>
-                <td colSpan={7}>No hay tareas</td>
+                <td colSpan={7}>
+                    {verCompletadas ? 'No hay tareas completadas' : 'No hay tareas pendientes'}
+                </td>
             </tr>
         );
     }
+    
 
     return (
         <>
@@ -44,6 +78,12 @@ function Tareas() {
                 <article className={style.gestion}>
                     <h3 className={style.gestion__titulo} >Gestion de tareas</h3>
                     <Link to='/crear-tarea' className={style.link}> <button className={style.gestion__boton_add}>Crear Tarea</button></Link>
+                    <button 
+                        className={style.gestion__boton_add}
+                        onClick={() => setVerCompletadas(!verCompletadas)}
+                        >
+                        {verCompletadas ? 'Ver tareas pendientes' : 'Ver tareas completadas'}
+                    </button>
                     <table>
                         <thead>
                             <tr>
@@ -61,6 +101,7 @@ function Tareas() {
                             <Tooltip id="eliminar" />
                             <Tooltip id="editar" />
                             <Tooltip id="ver" />
+                            <Tooltip id="completar" />
                         </tbody>
                     </table>
                 </article>
