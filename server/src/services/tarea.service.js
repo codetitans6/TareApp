@@ -17,7 +17,6 @@ const updateTarea = async (id, data) => {
   return updatedTarea;
 };
 
-
 const addUsuariosTarea = async (tareaId, creadorId, usuarioId) => {
   try {
     const tarea = await Tarea.findById(tareaId);
@@ -67,6 +66,10 @@ const getUsuariosInTarea = async (tareaId) => {
     select: 'nombre correo'
   });
   return tarea?.usuarios || [];
+
+const marcarComoCompletada = async (id) => {
+  return await Tarea.findByIdAndUpdate(id, { completada: true }, { new: true });
+
 };
 
 export default {
@@ -76,5 +79,7 @@ export default {
   updateTarea,
   addUsuariosTarea,
   getUserId,
-  getUsuariosInTarea
+  getUsuariosInTarea,
+  marcarComoCompletada
+
 };

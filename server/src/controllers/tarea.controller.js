@@ -78,6 +78,21 @@ const getUsuariosInTarea = async(req, res) => {
     res.status(500).json({ error: 'Error al obtener usuarios de la tarea' })
   }
 }
+
+const completarTarea = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const tareaCompletada = await tareaService.marcarComoCompletada(id);
+    if (!tareaCompletada) {
+      return res.status(404).json({ error: 'Tarea no encontrada' });
+    }
+    res.status(200).json(tareaCompletada);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al marcar la tarea como completada' });
+  }
+};
+
 export default {
   crearTarea,
   getAllUserTareas,
@@ -85,5 +100,7 @@ export default {
   updateTarea,
   addUsuariosTarea,
   getUsuarioId,
-  getUsuariosInTarea
+  getUsuariosInTarea,
+  completarTarea
+
 }
