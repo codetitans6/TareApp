@@ -5,11 +5,11 @@ const crearUsuario = async (usuarioData) => {
     const usuario = new Usuario(usuarioData)
     const guardarUsuario = await usuario.save()
 
-    const token = generateToken({ idUsuario: usuario._id, nombreUsuario: usuario.nombre })
+    const token = generateToken({ id: usuario._id, nombre: usuario.nombre })
 
     return {
         token,
-        usuario: { idUsuario: usuario._id, nombreUsuario: usuario.nombre, emailUsuario: usuario.email }
+        usuario: { id: usuario._id, nombre: usuario.nombre, email: usuario.email }
     }
 }
 

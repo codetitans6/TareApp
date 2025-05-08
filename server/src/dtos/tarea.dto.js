@@ -6,6 +6,12 @@ export const tareaSchema = Joi.object({
   prioridad: Joi.string().valid('alta', 'media', 'baja').default('media').required(),
   recordatorio: Joi.boolean().truthy('true').falsy('false').required(),
   fechaCierre: Joi.date().iso().required(),
-  materia: Joi.string().required()
+  materia: Joi.string().required(),
+  creador: Joi.string().required(),
+  usuarios: Joi.array(),
+  completada: Joi.boolean(),
+  createdAt: Joi.allow(),
+  updatedAt: Joi.allow(),
+  __v: Joi.allow()
 });
 

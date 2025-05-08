@@ -1,3 +1,4 @@
+
 import mongoose from 'mongoose'
 
 const tareaSchema = new mongoose.Schema({
@@ -22,7 +23,7 @@ const tareaSchema = new mongoose.Schema({
   },
   fechaCierre: {
     type: Date,
-    required:true
+    required: true
   },
   materia: {
     type: String,
@@ -31,7 +32,17 @@ const tareaSchema = new mongoose.Schema({
   completada: {
     type: Boolean,
     default: false
-  }
+  },
+  creador: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Usuario',
+    required: true
+  },
+  usuarios: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Usuario',
+    required: false
+  }]
 }, { timestamps: true });
 
 const tarea = mongoose.model('Tarea', tareaSchema, 'tarea');

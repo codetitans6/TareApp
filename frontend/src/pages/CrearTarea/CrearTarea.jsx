@@ -1,9 +1,11 @@
 import style from './CrearTarea.module.css'
 import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import { createRef, useState } from 'react'
 import useCrearTarea from '../../hooks/useCrearTarea';
 
 function CrearTarea() {
+    const id = localStorage.getItem('id')
+
     const [titulo, setTitulo] = useState('')
     const [descripcion, setDescripcion] = useState('')
     const [fechaCierre, setFechaCierre] = useState('')
@@ -11,21 +13,21 @@ function CrearTarea() {
     const [materia, setMateria] = useState('')
     const [prioridad, setPrioridad] = useState('media')
     const { submitTarea, loading, error, success } = useCrearTarea();
-
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Validación del campo recordatorio
         if (recordatorio !== 'true' && recordatorio !== 'false') {
             alert('Por favor selecciona una opción de recordatorio.');
             return;
         }
+
         submitTarea({
             titulo,
             descripcion,
             fechaCierre,
             recordatorio: recordatorio === 'true',
             materia,
-            prioridad
+            prioridad,
+            creador: id
         }, () => {
             setTitulo('');
             setDescripcion('')
