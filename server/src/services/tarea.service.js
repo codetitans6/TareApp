@@ -66,6 +66,7 @@ const getUsuariosInTarea = async (tareaId) => {
     select: 'nombre correo'
   });
   return tarea?.usuarios || [];
+}
 
 const marcarComoCompletada = async (id) => {
   return await Tarea.findByIdAndUpdate(id, { completada: true }, { new: true });
