@@ -14,3 +14,16 @@ export const crearUsuario = async (usuarioData) => {
     }
     return data
 }
+
+export const inicioSesion = async (correo, contrasena) => {
+    const res = await fetch(`${API_URL}/inicio`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ correo, contrasena })
+    })
+    const data = await res.json();
+    if (!res.ok) {
+        throw new Error(data.message || 'Error al crear al usuario')
+    }
+    return data
+}
