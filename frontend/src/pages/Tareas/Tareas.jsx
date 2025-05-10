@@ -29,7 +29,7 @@ function Tareas() {
     const [tareaId, setTareaId] = useState()
     const [isShareOpen, setShareOpen] = useState(false)
     if (loading) return <p>Cargando tareas...</p>;
-    if (error) return <p>{error}</p>;
+    if (error) return <p className={style.error}>{error}</p>;
     const abrirShare = () => setShareOpen(true)
     const cerrarShare = () => setShareOpen(false)
     let content
