@@ -52,3 +52,8 @@ th {
 .prioridad {
     text-transform: capitalize;
 }
+.error {
+    text-align: center;
+    font-weight: bold;
+    color: #f00;
+}

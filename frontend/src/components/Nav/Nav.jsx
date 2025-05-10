@@ -18,7 +18,7 @@ function Nav() {
                     <li className={style.nav__list_item}><Link to='/' className={style.link}>Home</Link></li>
                     {!token && (
                         <>
-                            <li className={style.nav__list_item}>Iniciar sesión</li>
+                            <li className={style.nav__list_item}><Link to='/inicio-sesion' className={style.link}>Inicio sesión</Link></li>
                             <li className={style.nav__list_item}><Link to='/registro' className={style.link}>Registrate</Link></li>
                         </>
                     )}

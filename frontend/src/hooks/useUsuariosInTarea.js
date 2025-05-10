@@ -12,7 +12,6 @@ const useUsuariosInTarea = (tareaId) => {
 
     try {
       const data = await getUsuariosInTarea(tareaId);
-
       if (data?.error) {
         setError({ error: data.error });
       } else {
@@ -29,8 +28,9 @@ const useUsuariosInTarea = (tareaId) => {
     if (tareaId) fetchUsuarios();
   }, [tareaId]);
 
-  return { usuarios, loading, error };
+  return { usuarios, loading, error, refetch: fetchUsuarios };
 };
 
 export default useUsuariosInTarea;
+
 

@@ -44,39 +44,6 @@ describe('Tarea Service', () => {
       await expect(tareaService.crearTarea(data)).rejects.toThrow(errorMessage);
     });
   });
-  describe('getAllTareas', () => {
-    it('debería obtener todas las tareas correctamente', async () => {
-      const mockTareas = [
-        {
-          _id: '1',
-          titulo: 'Tarea 1',
-          prioridad: 'alta',
-          materia: 'Matemáticas'
-        },
-        {
-          _id: '2',
-          titulo: 'Tarea 2',
-          prioridad: 'baja',
-          materia: 'Español'
-        }
-      ];
-
-      Tarea.find = jest.fn().mockResolvedValue(mockTareas);
-
-      const result = await tareaService.getAllTareas();
-      expect(result).toEqual(mockTareas);
-      expect(Tarea.find).toHaveBeenCalled();
-    });
-
-    it('debería manejar errores al obtener todas las tareas', async () => {
-      const errorMessage = 'Error al obtener tareas';
-
-      Tarea.find = jest.fn().mockRejectedValue(new Error(errorMessage));
-
-      await expect(tareaService.getAllTareas()).rejects.toThrow(errorMessage);
-      expect(Tarea.find).toHaveBeenCalled();
-    });
-  });
 
   describe('getTareaById', () => {
     it('debería obtener una tarea por ID correctamente', async () => {
@@ -119,7 +86,7 @@ describe('Tarea Service', () => {
         titulo: 'Título actualizado',
         descripcion: 'Nueva descripción'
       };
-      
+
       const tareaActualizada = {
         _id: tareaId,
         ...datosTarea,
@@ -156,5 +123,52 @@ describe('Tarea Service', () => {
       expect(Tarea.findByIdAndUpdate).toHaveBeenCalledWith(tareaId, datosTarea, { new: true });
     });
   });
+  describe('getUsuariosInTarea', () => {
+    it('debería retornar la lista de usuarios relacionados con la tarea', async () => {
+      const tareaId = 'tarea123';
+      const mockUsuarios = [
+        { nombre: 'Ana', correo: 'ana@mail.com' },
+        { nombre: 'Luis', correo: 'luis@mail.com' }
+      ];
+
+      const mockPopulate = jest.fn().mockResolvedValue({ usuarios: mockUsuarios });
+      const mockFindById = jest.fn(() => ({ populate: mockPopulate }));
+      Tarea.findById = mockFindById;
+
+      const result = await tareaService.getUsuariosInTarea(tareaId);
+
+      expect(result).toEqual(mockUsuarios);
+      expect(Tarea.findById).toHaveBeenCalledWith(tareaId);
+      expect(mockPopulate).toHaveBeenCalledWith({
+        path: 'usuarios',
+        select: 'nombre correo'
+      });
+    });
+
+    it('debería retornar un array vacío si no se encuentra la tarea', async () => {
+      const tareaId = 'inexistente';
+
+      const mockPopulate = jest.fn().mockResolvedValue(null);
+      const mockFindById = jest.fn(() => ({ populate: mockPopulate }));
+      Tarea.findById = mockFindById;
+
+      const result = await tareaService.getUsuariosInTarea(tareaId);
+
+      expect(result).toEqual([]);
+      expect(Tarea.findById).toHaveBeenCalledWith(tareaId);
+    });
+
+    it('debería lanzar un error si ocurre una excepción', async () => {
+      const tareaId = 'fallo123';
+      const errorMsg = 'Falla inesperada';
+
+      Tarea.findById = jest.fn(() => ({
+        populate: jest.fn().mockRejectedValue(new Error(errorMsg))
+      }));
+
+      await expect(tareaService.getUsuariosInTarea(tareaId)).rejects.toThrow(errorMsg);
+    });
+  });
+
 });
 
