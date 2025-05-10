@@ -6,8 +6,20 @@ const crearTarea = async (data) => {
 };
 
 const getUserTareas = async (userId) => {
-  return await Tarea.find({ creador: userId })
-}
+  try {
+    const tareas = await Tarea.find({
+      $or: [
+        { creador: userId },   
+        { usuarios: userId }  
+      ]
+    });
+    return tareas;
+  } catch (error) {
+    console.error('Error obteniendo tareas:', error);
+    return [];
+  }
+};
+
 const getTareaById = async (id) => {
   return Tarea.findById(id)
 }
