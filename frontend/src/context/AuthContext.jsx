@@ -13,9 +13,13 @@ export const AuthProvider = ({ children }) => {
             localStorage.removeItem('id')
         }
     }, [token]);
-
+    const cerrarSesion = () => {
+        setToken(null);
+        localStorage.removeItem('token')
+        localStorage.removeItem('id')
+    };
     return (
-        <AuthContext.Provider value={{ token, setToken }}>
+        <AuthContext.Provider value={{ token, setToken, cerrarSesion }}>
             {children}
         </AuthContext.Provider>
     );
