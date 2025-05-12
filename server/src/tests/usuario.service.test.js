@@ -2,6 +2,10 @@ import usuarioService from '../services/usuario.service.js'
 import Usuario from '../models/usuario.model.js'
 import { generateToken } from '../utils/jwt.js'
 import bcrypt from 'bcryptjs'
+import Tarea from '../models/tarea.model.js';
+
+jest.mock('../models/tarea.model.js');
+
 
 jest.mock('../models/usuario.model.js')
 jest.mock('../utils/jwt.js', () => ({
@@ -43,7 +47,7 @@ describe('Usuario Service', () => {
       usuario: {
         id: '123abc',
         nombre: data.nombre,
-        email: data.correo
+        correo: data.correo
       }
     };
 
@@ -75,13 +79,41 @@ describe('Usuario Service', () => {
       usuario: {
         id: '123abc',
         nombre: data.nombre,
-        email: data.correo
+        correo: data.correo
       }
     };
 
     expect(resultado).toEqual(expectedResult);
     expect(Usuario.findOne).toHaveBeenCalledWith({ correo: data.correo });
     expect(bcrypt.compare).toHaveBeenCalledWith(data.contrasena, fakeUsuario.contrasena);
+  });
+  it('debería eliminar la cuenta del usuario y sus relaciones', async () => {
+    const userId = '123abc';
+
+    const mockUsuario = {
+      _id: userId,
+      nombre: 'Judy Fajardo',
+      correo: 'judy@gmail.com'
+    };
+
+    Usuario.findById = jest.fn().mockResolvedValue(mockUsuario);
+    Usuario.findByIdAndDelete = jest.fn().mockResolvedValue();
+    Tarea.deleteMany = jest.fn().mockResolvedValue();
+    Tarea.updateMany = jest.fn().mockResolvedValue();
+
+    const resultado = await usuarioService.eliminarCuenta(userId);
+
+    expect(Usuario.findById).toHaveBeenCalledWith(userId);
+    expect(Usuario.findByIdAndDelete).toHaveBeenCalledWith(userId);
+    expect(Tarea.deleteMany).toHaveBeenCalledWith({ creador: userId });
+    expect(Tarea.updateMany).toHaveBeenCalledWith(
+      { usuarios: userId },
+      { $pull: { usuarios: userId } }
+    );
+
+    expect(resultado).toEqual({
+      message: 'Usuario y sus relaciones eliminadas correctamente'
+    });
   });
 
 });
