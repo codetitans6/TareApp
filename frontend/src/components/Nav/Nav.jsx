@@ -1,10 +1,18 @@
 import style from './Nav.module.css'
-import { Link } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext';
 import { useState } from 'react';
 function Nav() {
+    const navigate = useNavigate();
     const { token } = useAuth();
+    const { cerrarSesion } = useAuth();
     const [openMenu, setOpenMenu] = useState(false)
+
+    const handleLogout = () => {
+        navigate('/')
+        cerrarSesion()
+        
+    };
     return (
         <>
             <nav className={style.nav}>
@@ -30,7 +38,7 @@ function Nav() {
                                 {openMenu && (
                                     <div className={style.menu}>
                                         <ul>
-                                            <li>Salir</li>
+                                            <li onClick={handleLogout}>Salir</li>
                                             <li>Configuraciones</li>
                                         </ul>
                                     </div>
