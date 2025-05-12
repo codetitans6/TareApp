@@ -1,27 +1,24 @@
 import { useState } from 'react'
-import { inicioSesion } from '../services/usuarioService'
+import { eliminarCuenta } from '../services/usuarioService'
 import { useAuth } from '../context/AuthContext';
 
-const useInicioSesion = () => {
+const useEliminarCuenta = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
-    const { setToken, setUsuario } = useAuth()
+    const { cerrarSesion } = useAuth();
 
-
-    const submitInicioSesion = async ({ correo, contrasena }, callback) => {
+    const submitEliminarCuenta = async (userId, callback) => {
         setLoading(true);
         setError(null);
         setSuccess(false);
         try {
-            const data = await inicioSesion(correo, contrasena);
+            const data = await eliminarCuenta(userId)
             if (data.error) {
                 throw new Error(data.error);
             }
-            if (data.token) setToken(data.token);
-            if (data.usuario) localStorage.setItem('id', data.usuario.id);
-            if (data.usuario) setUsuario(data.usuario);
             setSuccess(true);
+            cerrarSesion()
             if (callback) callback();
         } catch (error) {
             setError(error.message || 'Error inesperado');
@@ -30,6 +27,6 @@ const useInicioSesion = () => {
         }
     };
 
-    return { submitInicioSesion, loading, error, success };
+    return { submitEliminarCuenta, loading, error, success };
 }
-export default useInicioSesion;
+export default useEliminarCuenta;

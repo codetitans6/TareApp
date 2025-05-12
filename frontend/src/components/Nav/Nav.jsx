@@ -1,18 +1,47 @@
 import style from './Nav.module.css'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { toast, Bounce } from 'react-toastify';
+
 function Nav() {
     const navigate = useNavigate();
     const { token } = useAuth();
     const { cerrarSesion } = useAuth();
     const [openMenu, setOpenMenu] = useState(false)
+    const notify = () => toast.success("Cerraste sesión correctamente", {
+        position: "top-center",
+        autoClose: 1200,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+    });
+    const menuRef = useRef();
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (!openMenu) return;
 
+            if (menuRef.current && !menuRef.current.contains(e.target)) {
+                setOpenMenu(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [openMenu]);
     const handleLogout = () => {
-        navigate('/')
+        notify()
         cerrarSesion()
-        
+        navigate('/')
+
     };
+
     return (
         <>
             <nav className={style.nav}>
@@ -33,13 +62,13 @@ function Nav() {
                     {token && (
                         <>
                             <li className={style.nav__list_item}><Link to='/tareas' className={style.link}>Mis tareas</Link></li>
-                            <div className={style.user_menu}>
+                            <div ref={menuRef} className={style.user_menu}>
                                 <li className={style.user_icon}><button className={style.user_icon_button} onClick={() => setOpenMenu(!openMenu)}><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24"><g fill="none" stroke="#fff" strokeWidth="1.5"><circle cx="12" cy="9" r="3" /><circle cx="12" cy="12" r="10" /><path strokeLinecap="round" d="M17.97 20c-.16-2.892-1.045-5-5.97-5s-5.81 2.108-5.97 5" /></g></svg></button></li>
                                 {openMenu && (
                                     <div className={style.menu}>
                                         <ul>
-                                            <li onClick={handleLogout}>Salir</li>
-                                            <li>Configuraciones</li>
+                                            <li onClick={() => {handleLogout(), setOpenMenu(false) }}>Salir</li>
+                                            <Link to='/configuraciones' className={style.link}><li>Configuraciones</li></Link>
                                         </ul>
                                     </div>
                                 )}

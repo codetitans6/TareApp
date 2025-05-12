@@ -8,7 +8,6 @@ router.post('/', validate(tareaSchema), tareaController.crearTarea);
 router.get('/tareas/:id', tareaController.getAllUserTareas);
 router.get('/:id', tareaController.getTareaById); 
 router.put('/:id', validate(tareaSchema), tareaController.updateTarea);
-router.put('/asignar', tareaController.addUsuariosTarea);
 router.get('/usuario/:correo', tareaController.getUsuarioId); 
 router.get('/usuarios/:tareaId', tareaController.getUsuariosInTarea)
 router.patch('/:id/completar', tareaController.completarTarea);

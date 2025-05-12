@@ -9,7 +9,7 @@ function InicioSesion() {
     const { submitInicioSesion, loading, error } = useInicioSesion();
     const notify = () => toast.success("Inicio de sesion correcto", {
         position: "top-center",
-        autoClose: 1200,
+        autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: false,
         pauseOnHover: true,
@@ -17,7 +17,7 @@ function InicioSesion() {
         progress: undefined,
         theme: "colored",
         transition: Bounce,
-    });
+    })
     const [form, setForm] = useState({ correo: '', contrasena: '' });
 
     const handleChange = (e) => {
@@ -59,19 +59,6 @@ function InicioSesion() {
 
                     <input className={style.inicio_input_submit} type="submit" value="Iniciar sesión" disabled={loading} />
                 </form>
-                <ToastContainer
-                    position="top-center"
-                    autoClose={1200}
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick={false}
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
-                    theme="colored"
-                    transition={Bounce} />
-
             </div>
         </>
     );

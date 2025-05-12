@@ -44,20 +44,6 @@ const updateTarea = async (req, res) => {
     res.status(500).json({ error: 'Error al actualizar la tarea' })
   }
 }
-const addUsuariosTarea = async (req, res) => {
-  const { tareaId, creadorId, usuarioId } = req.body;
-  try {
-    const result = await tareaService.addUsuariosTarea(tareaId, creadorId, usuarioId);
-    if (result.error) {
-      return res.status(400).json({ error: result.error.error });
-    }
-    return res.status(200).json(result)
-  } catch (error) {
-    console.error('Error en controller addUsuariosTarea:', error);
-    res.status(500).json({ error: 'Error al asignar la tarea' });
-  }
-};
-
 const getUsuarioId = async (req, res) => {
   const { correo } = req.params
   try {
@@ -68,8 +54,8 @@ const getUsuarioId = async (req, res) => {
     res.status(500).json({ error: 'Error al obtener id de usuario' })
   }
 }
-const getUsuariosInTarea = async(req, res) => {
-  const {tareaId} = req.params
+const getUsuariosInTarea = async (req, res) => {
+  const { tareaId } = req.params
   try {
     const usuarios = await tareaService.getUsuariosInTarea(tareaId)
     res.status(200).json(usuarios)
@@ -98,7 +84,6 @@ export default {
   getAllUserTareas,
   getTareaById,
   updateTarea,
-  addUsuariosTarea,
   getUsuarioId,
   getUsuariosInTarea,
   completarTarea

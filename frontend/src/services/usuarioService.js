@@ -27,3 +27,15 @@ export const inicioSesion = async (correo, contrasena) => {
     }
     return data
 }
+
+export const eliminarCuenta = async (userId) => {
+    const res = await fetch(`${API_URL}/eliminar/${userId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+    })
+    const data = await res.json();
+    if (!res.ok) {
+        throw new Error(data.message || 'Error al eliminar cuenta')
+    }
+    return data
+}

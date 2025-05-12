@@ -64,3 +64,7 @@
     border: none;
     cursor: pointer;
 }
+.link {
+    text-decoration: none;
+    color: #fff;
+}

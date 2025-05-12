@@ -6,7 +6,7 @@ const registro = async (req, res) => {
         const resultado = await UsuarioService.crearUsuario(req.body)
         res.status(200).json({
             token: resultado.token,
-            usuario: { id: resultado.usuario.id, nombre: resultado.usuario.nombre }
+            usuario: { id: resultado.usuario.id, nombre: resultado.usuario.nombre, correo: resultado.usuario.correo }
         })
     } catch (error) {
         if (error.name === 'ValidationError') {
@@ -31,7 +31,7 @@ const inicioSesion = async (req, res) => {
         }
         res.status(200).json({
             token: resultado.token,
-            usuario: { id: resultado.usuario.id, nombre: resultado.usuario.nombre }
+            usuario: { id: resultado.usuario.id, nombre: resultado.usuario.nombre, correo: resultado.usuario.correo }
         });
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
@@ -39,8 +39,22 @@ const inicioSesion = async (req, res) => {
 
     }
 };
+const eliminarCuenta = async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const resultado = await UsuarioService.eliminarCuenta(userId);
+        if (resultado.error) {
+            return res.status(404).json({ error: resultado.error });
+        }
+        res.status(200).json({ message: resultado.message });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: `Error al eliminar cuenta ${error.message}` });
+    }
+};
 
 export default {
     registro,
-    inicioSesion
+    inicioSesion,
+    eliminarCuenta
 }
