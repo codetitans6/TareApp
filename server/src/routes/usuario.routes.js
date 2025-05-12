@@ -7,5 +7,5 @@ import { validate } from '../middlewares/validate.middleware.js'
 
 router.post('/', validate(usuarioSchema), usuarioController.registro)
 router.post('/inicio', usuarioController.inicioSesion)
-
+router.post('/eliminar/:userId', usuarioController.eliminarCuenta);
 export default router
