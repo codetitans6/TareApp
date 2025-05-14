@@ -24,6 +24,7 @@ function App() {
                     <Route path='/editar/:id' element={<EditarTarea />} />
                     <Route path='/configuraciones' element={<Configuraciones />} />
                     <Route path="/ver/:id" element={<VerTarea />} />
+                    <Route path="/ver-tarea/:id" element={<VerTarea />} />
                 </Routes>
                 <ToastContainer
                     position="top-center"
