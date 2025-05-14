@@ -44,6 +44,10 @@ function Tareas() {
         }
     };
     const [verCompletadas, setVerCompletadas] = useState(false);
+    const [filtroMateria, setFiltroMateria] = useState('');
+    const [filtroProyecto, setFiltroProyecto] = useState('');
+    const [filtroFechaInicio, setFiltroFechaInicio] = useState('');
+    const [filtroFechaFin, setFiltroFechaFin] = useState('');
     const { tareas, loading, error } = useTareas();
     const tareasFiltradas = tareas?.filter(t => {
     const coincideEstado = t.completada === verCompletadas;
@@ -60,10 +64,6 @@ function Tareas() {
 
     const [tareaId, setTareaId] = useState()
     const [isShareOpen, setShareOpen] = useState(false)
-    const [filtroMateria, setFiltroMateria] = useState('');
-    const [filtroProyecto, setFiltroProyecto] = useState('');
-    const [filtroFechaInicio, setFiltroFechaInicio] = useState('');
-    const [filtroFechaFin, setFiltroFechaFin] = useState('');
 
     if (loading) return <p>Cargando tareas...</p>;
     if (error) return <p className={style.error}>{error}</p>;
@@ -147,11 +147,13 @@ function Tareas() {
                             value={filtroProyecto}
                             onChange={(e) => setFiltroProyecto(e.target.value)}
                         />
+                        De:
                         <input
                             type="date"
                             value={filtroFechaInicio}
                             onChange={(e) => setFiltroFechaInicio(e.target.value)}
                         />
+                        Hasta:
                         <input
                             type="date"
                             value={filtroFechaFin}
