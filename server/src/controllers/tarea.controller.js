@@ -36,6 +36,21 @@ const getTareaById = async (req, res) => {
 };
 
 
+const eliminarTarea = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const tarea = await tareaService.eliminarTarea(id);
+
+    if (!tarea) {
+      return res.status(404).json({ mensaje: 'Tarea no encontrada' });
+    }
+
+    res.status(200).json({ mensaje: 'Tarea eliminada correctamente' });
+  } catch (error) {
+    res.status(500).json({ mensaje: 'Error al eliminar tarea' });
+  }
+};
 
 const updateTarea = async (req, res) => {
   try {
@@ -111,5 +126,6 @@ export default {
   updateTarea,
   getUsuarioId,
   getUsuariosInTarea,
-  completarTarea
+  completarTarea,
+  eliminarTarea
 }

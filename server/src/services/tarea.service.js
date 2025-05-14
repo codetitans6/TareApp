@@ -51,6 +51,17 @@ const marcarComoCompletada = async (id) => {
 
 };
 
+const eliminarTarea = async (id) => {
+  try {
+    const tareaEliminada = await Tarea.findByIdAndDelete(id);
+    return tareaEliminada;
+  } catch (error) {
+    console.error('Error eliminando tarea:', error);
+    throw error;
+  }
+};
+
+
 export default {
   crearTarea,
   getUserTareas,
@@ -58,6 +69,6 @@ export default {
   updateTarea,
   getUserId,
   getUsuariosInTarea,
-  marcarComoCompletada
-
+  marcarComoCompletada,
+  eliminarTarea
 };

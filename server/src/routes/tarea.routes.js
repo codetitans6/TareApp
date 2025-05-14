@@ -11,4 +11,5 @@ router.put('/:id', validate(tareaSchema), tareaController.updateTarea);
 router.get('/usuario/:correo', tareaController.getUsuarioId); 
 router.get('/usuarios/:tareaId', tareaController.getUsuariosInTarea)
 router.patch('/:id/completar', tareaController.completarTarea);
+router.delete('/:id', tareaController.eliminarTarea);
 export default router

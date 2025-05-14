@@ -6,6 +6,7 @@ import CrearTarea from './pages/CrearTarea/CrearTarea'
 import Registro from './pages/Registro/Registro'
 import EditarTarea from './pages/EditarTarea/EditarTarea'
 import InicioSesion from './pages/InicioSesion/InicioSesion'
+import VerTarea from './components/VerTarea/VerTarea';
 import Configuraciones from './pages/Configuraciones/Configuraciones'
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
@@ -22,6 +23,7 @@ function App() {
                     <Route path='/inicio-sesion' element={<InicioSesion />} />
                     <Route path='/editar/:id' element={<EditarTarea />} />
                     <Route path='/configuraciones' element={<Configuraciones />} />
+                    <Route path="/ver/:id" element={<VerTarea />} />
                 </Routes>
                 <ToastContainer
                     position="top-center"

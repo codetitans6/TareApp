@@ -23,11 +23,48 @@ function Tareas() {
             console.error('Error al completar tarea:', error);
         }
     };
+    const eliminarTarea = async (id) => {
+        const confirmar = window.confirm('¿Estás seguro de que deseas eliminar esta tarea?');
+
+        if (!confirmar) return;
+
+        try {
+            const response = await fetch(`http://localhost:3000/api/tareas/${id}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error('No se pudo eliminar la tarea');
+            }
+
+            // recargar las tareas (opcionalmente usa estado para evitar recarga total)
+            window.location.reload();
+        } catch (error) {
+            console.error('Error al eliminar tarea:', error);
+        }
+    };
     const [verCompletadas, setVerCompletadas] = useState(false);
     const { tareas, loading, error } = useTareas();
-    const tareasFiltradas = tareas?.filter(t => t.completada === verCompletadas);
+    const tareasFiltradas = tareas?.filter(t => {
+    const coincideEstado = t.completada === verCompletadas;
+    const coincideMateria = filtroMateria === '' || t.materia.toLowerCase().includes(filtroMateria.toLowerCase());
+    const coincideProyecto = filtroProyecto === '' || t.proyecto?.toLowerCase().includes(filtroProyecto.toLowerCase());
+
+    const fechaCierre = new Date(t.fechaCierre);
+    const dentroDeRango =
+        (!filtroFechaInicio || fechaCierre >= new Date(filtroFechaInicio)) &&
+        (!filtroFechaFin || fechaCierre <= new Date(filtroFechaFin));
+
+    return coincideEstado && coincideMateria && coincideProyecto && dentroDeRango;
+    });
+
     const [tareaId, setTareaId] = useState()
     const [isShareOpen, setShareOpen] = useState(false)
+    const [filtroMateria, setFiltroMateria] = useState('');
+    const [filtroProyecto, setFiltroProyecto] = useState('');
+    const [filtroFechaInicio, setFiltroFechaInicio] = useState('');
+    const [filtroFechaFin, setFiltroFechaFin] = useState('');
+
     if (loading) return <p>Cargando tareas...</p>;
     if (error) return <p className={style.error}>{error}</p>;
     const abrirShare = () => setShareOpen(true)
@@ -60,11 +97,21 @@ function Tareas() {
                                 ✅
                             </button>
                         )}
-                        <button className={style.accion_boton} data-tooltip-id="eliminar" data-tooltip-content="Eliminar tarea" data-tooltip-place="top">🗑️</button>
+                        <button
+                            className={style.accion_boton}
+                            data-tooltip-id="eliminar"
+                            data-tooltip-content="Eliminar tarea"
+                            data-tooltip-place="top"
+                            onClick={() => eliminarTarea(tarea._id)}
+                        >
+                            🗑️
+                        </button>
                         <Link to={`/editar/${tarea._id}`}>
                             <button className={style.accion_boton} data-tooltip-id="editar" data-tooltip-content="Editar tarea" data-tooltip-place="top">✏️</button>
                         </Link>
-                        <button className={style.accion_boton} data-tooltip-id="ver" data-tooltip-content="Ver tarea" data-tooltip-place="top">👁️</button>
+                        <Link to={`/ver-tarea/${tarea._id}`}>
+                            <button className={style.accion_boton} data-tooltip-id="ver" data-tooltip-content="Ver tarea" data-tooltip-place="top">👁️</button>
+                        </Link>
                     </div>
                 </td>
                 <td><button onClick={() => {abrirShare(); setTareaId(tarea._id)}} className={style.accion_boton}><svg xmlns="http://www.w3.org/2000/svg" width="1.4em" height="1.4em" viewBox="0 0 24 24"><path fill="none" stroke="#059669" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 12a1 1 0 1 0 2 0a1 1 0 1 0-2 0m0 7a1 1 0 1 0 2 0a1 1 0 1 0-2 0m0-14a1 1 0 1 0 2 0a1 1 0 1 0-2 0"/></svg></button></td>
@@ -87,6 +134,30 @@ function Tareas() {
                 <ShareTarea isOpen={isShareOpen} onClose={cerrarShare} tareaId={tareaId}></ShareTarea>
                 <article className={style.gestion}>
                     <h3 className={style.gestion__titulo} >Gestion de tareas</h3>
+                    <div className={style.filtros}>
+                        <input
+                            type="text"
+                            placeholder="Filtrar por materia"
+                            value={filtroMateria}
+                            onChange={(e) => setFiltroMateria(e.target.value)}
+                        />
+                        <input
+                            type="text"
+                            placeholder="Filtrar por proyecto"
+                            value={filtroProyecto}
+                            onChange={(e) => setFiltroProyecto(e.target.value)}
+                        />
+                        <input
+                            type="date"
+                            value={filtroFechaInicio}
+                            onChange={(e) => setFiltroFechaInicio(e.target.value)}
+                        />
+                        <input
+                            type="date"
+                            value={filtroFechaFin}
+                            onChange={(e) => setFiltroFechaFin(e.target.value)}
+                        />
+                    </div>
                     <Link to='/crear-tarea' className={style.link}> <button className={style.gestion__boton_add}>Crear Tarea</button></Link>
                     <button
                         className={style.gestion__boton_add}
