@@ -5,6 +5,10 @@ import Tareas from './pages/Tareas/Tareas'
 import CrearTarea from './pages/CrearTarea/CrearTarea'
 import Registro from './pages/Registro/Registro'
 import EditarTarea from './pages/EditarTarea/EditarTarea'
+import InicioSesion from './pages/InicioSesion/InicioSesion'
+import VerTarea from './components/VerTarea/VerTarea';
+import Configuraciones from './pages/Configuraciones/Configuraciones'
+import { ToastContainer, toast, Bounce } from 'react-toastify';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 function App() {
     return (
@@ -12,12 +16,28 @@ function App() {
             <BrowserRouter>
                 <Nav />
                 <Routes>
-                    <Route path='/' element={<Home />}/>
+                    <Route path='/' element={<Home />} />
                     <Route path='/tareas' element={<Tareas />} />
                     <Route path='/crear-tarea' element={<CrearTarea />} />
                     <Route path='/registro' element={<Registro />} />
+                    <Route path='/inicio-sesion' element={<InicioSesion />} />
                     <Route path='/editar/:id' element={<EditarTarea />} />
+                    <Route path='/configuraciones' element={<Configuraciones />} />
+                    <Route path="/ver/:id" element={<VerTarea />} />
                 </Routes>
+                <ToastContainer
+                    position="top-center"
+                    autoClose={1200}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick={false}
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="colored"
+                    transition={Bounce}
+                />
             </BrowserRouter>
         </>
     )

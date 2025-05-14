@@ -53,29 +53,35 @@
 .share_title {
     margin: 10px 0;
 }
+
 .share_subtitle {
     margin: 10px 0;
 }
+
 .share_list {
     margin: 0;
     list-style: none;
     padding: 0;
 }
+
 .share_list_item {
     background-color: #dddddd;
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 5px;
 }
+
 .share_list_item p:first-of-type {
     margin: 0;
     font-size: 0.9em;
     font-weight: bold;
 }
+
 .share_list_item p:nth-of-type(2) {
     margin: 0;
     font-size: 0.8em;
 }
+
 .share_form_input_btn {
     font-family: Poppins, serif;
     font-size: 0.75em;
@@ -85,6 +91,21 @@
     border-radius: 5px;
     border: none;
 }
+
+.success {
+    margin: 6px 0;
+    font-weight: bold;
+    font-size: 0.85rem;
+    color: #148719;
+}
+
+.error {
+    margin: 6px 0;
+    font-weight: bold;
+    font-size: 0.85rem;
+    color: #871414;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;

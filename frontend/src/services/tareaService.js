@@ -1,5 +1,5 @@
 const API_URL = 'http://localhost:3000/api/tareas'
-
+const NOTIFICACIONES_API = 'http://localhost:3000/api/notificaciones';
 
 export const crearTarea = async (tareaData) => {
     const res = await fetch(API_URL, {
@@ -60,16 +60,19 @@ export const asignarUsuarios = async (tareaId, creadorId, usuarioId) => {
         if (tarea.creador !== creadorId) {
             return { error: 'No tienes permisos para editar esta tarea' };
         }
-        
+        console.log("CREADOR" + tarea.creador + "USUARIO: " + usuarioId)
+        if (tarea.creador === usuarioId) {
+            return { error: 'No puedes asignarte tu propia tarea' };
+        }
         const usuariosActuales = tarea.usuarios || [];
         if (usuariosActuales.includes(usuarioId)) {
             return { error: 'El usuario ya está asignado a esta tarea' };
         }
-    
+
         const { _id, ...tareaSinId } = tarea;
         const usuariosActualizados = Array.from(new Set([...usuariosActuales, usuarioId]));
-        
-    
+
+
         const res = await fetch(`${API_URL}/${tareaId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -78,16 +81,16 @@ export const asignarUsuarios = async (tareaId, creadorId, usuarioId) => {
                 usuarios: usuariosActualizados
             })
         });
-        
+
         if (!res.ok) {
             const errorData = await res.json();
             console.error("Error en asignarUsuarios:", errorData);
             return { error: errorData.error || 'Error al asignar la tarea' };
         }
-        
+
         const tareaActualizada = await res.json();
-        return { 
-            success: true, 
+        return {
+            success: true,
             tarea: tareaActualizada,
             message: 'Usuario asignado correctamente a la tarea'
         };
@@ -121,3 +124,16 @@ export const getUsuariosInTarea = async (tareaId) => {
     }
     return res.json()
 }
+export const marcarNotificacionComoLeida = async (id) => {
+    const res = await fetch(`${NOTIFICACIONES_API}/${id}/leida`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message || 'Error al marcar la notificación como leída');
+    }
+
+    return res.json();
+};

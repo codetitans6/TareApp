@@ -8,7 +8,7 @@
     padding: 20px 5%;
 }
 
-.logo_link{
+.logo_link {
     margin: 0;
     display: flex;
     align-items: center;
@@ -25,42 +25,136 @@
     cursor: pointer;
     align-items: center;
 }
+
 .nav__list_item .link {
     color: #fff;
     text-decoration: none;
 }
+
 .nav__list_item .link:hover {
     color: #1c611a;
 }
+
 .user_icon {
     margin-top: 5px;
-} 
+}
+
 .user_menu {
     position: relative;
-} 
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
 .menu {
     position: absolute;
     background-color: #11680bc4;
     color: #fff;
     padding: 10px;
     right: 0;
+    top: 35px;
 }
+
 .menu ul {
     list-style: none;
     margin: 0;
     padding: 0;
 }
+
 .menu ul li {
     background-color: #239c1d;
     margin: 5px 0;
     padding: 5px 10px;
     text-align: center;
 }
+
 .menu ul li:hover {
     background-color: #1c611a;
 }
+
 .user_icon_button {
     background-color: transparent;
     border: none;
     cursor: pointer;
+    position: relative;
+}
+
+.link {
+    text-decoration: none;
+    color: #fff;
+}
+
+.noty_menu {
+    position: absolute;
+    background-color: #9abf77dc;
+    top: 35px;
+    right: 40px;
+    width: 300px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.noty_menu h5 {
+    margin: 0;
+    font-weight: bold;
+
+
+}
+
+.noty_menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.noty_container {
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 4px 0;
+    color: #000;
+    display: grid;
+    grid-template-columns: 1fr 20px;
+    gap: 10px;
+}
+
+.noty_title {
+    margin: 0;
+    font-weight: 500;
+    font-size: 0.85em;
+
+}
+
+.noty_body {
+    margin: 0;
+    font-weight: 300;
+    font-size: 0.80em;
+}
+
+.noty_icon {
+    margin-right: 10px;
+}
+
+.noty_leida {
+    opacity: 0.8;
+}
+
+.noty_badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #ef4444;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 9999px;
+    z-index: 10;
+}
+
+.vista {
+    background-color: #777777;
+    padding: 0 10px;
+    margin: 10px;
+    color: #fff;
 }

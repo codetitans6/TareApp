@@ -1,17 +1,30 @@
 import style from './CrearTarea.module.css'
-import { Link } from 'react-router-dom'
-import { createRef, useState } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
+import { useState } from 'react'
 import useCrearTarea from '../../hooks/useCrearTarea';
+import { toast, Bounce } from 'react-toastify';
 
 function CrearTarea() {
     const id = localStorage.getItem('id')
-
+    const navigate = useNavigate();
     const [titulo, setTitulo] = useState('')
     const [descripcion, setDescripcion] = useState('')
     const [fechaCierre, setFechaCierre] = useState('')
     const [recordatorio, setRecordatorio] = useState('')
     const [materia, setMateria] = useState('')
     const [prioridad, setPrioridad] = useState('media')
+
+    const notify = () => toast.success("Tarea añadida correctamente", {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+    });
     const { submitTarea, loading, error, success } = useCrearTarea();
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -34,6 +47,8 @@ function CrearTarea() {
             setFechaCierre('')
             setRecordatorio('')
             setMateria('')
+            navigate('/tareas');
+            notify()
         })
     }
     return (

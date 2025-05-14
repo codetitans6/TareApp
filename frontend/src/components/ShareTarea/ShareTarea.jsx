@@ -1,38 +1,50 @@
+import { useEffect, useState } from 'react';
 import style from './ShareTarea.module.css';
 import useUsuarioId from '../../hooks/useUsuarioId';
 import useAsignarUsuarios from '../../hooks/useAsignarTarea';
 import useUsuariosInTarea from '../../hooks/useUsuariosInTarea';
-import { useState } from 'react';
 
 function ShareTarea({ isOpen, onClose, tareaId }) {
-  const { email, setEmail, submitUsuarioEmail, loading: loadingUsuario, error: userError } = useUsuarioId();
-  const { asignar, loading, error: asignarError, data } = useAsignarUsuarios();
-  const { usuarios, loading: loadingUsuarios, error: errorUsuarios } = useUsuariosInTarea(tareaId);
+  const { email, setEmail, submitUsuarioEmail, loading: loadingUsuario } = useUsuarioId();
+  const { asignar, loading, data } = useAsignarUsuarios();
+  const { usuarios, loading: loadingUsuarios, error: errorUsuarios, refetch } = useUsuariosInTarea(tareaId);
 
-  const [successMessage, setSuccessMessage] = useState('');
+  const [mensaje, setMensaje] = useState({ tipo: null, texto: null });
+  useEffect(() => {
+    if (!isOpen) {
+      setEmail('');
+      setMensaje({ tipo: null, texto: null });
+    }
+  }, [isOpen]);
+  
+  const mostrarMensaje = (tipo, texto) => {
+    setMensaje({ tipo, texto });
+    setTimeout(() => setMensaje({ tipo: null, texto: null }), 3000);
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setSuccessMessage('');
 
     const userIdResult = await submitUsuarioEmail();
-
     if (userIdResult?.error) {
-      console.log('Error al obtener usuario:', userIdResult.error);
+      mostrarMensaje('error', userIdResult.error);
       return;
     }
 
     const creadorId = localStorage.getItem('id');
-    if (!userIdResult || !creadorId) return;
-
-    const asignacionResult = await asignar(tareaId, creadorId, userIdResult);
-
-    if (asignacionResult?.error) {
-      console.log('Error al asignar:', asignacionResult.error);
+    if (!creadorId) {
+      mostrarMensaje('error', 'No se pudo obtener el ID del creador');
       return;
     }
 
-    setSuccessMessage('Tarea compartida correctamente.');
+    const asignacionResult = await asignar(tareaId, creadorId, userIdResult);
+    if (asignacionResult?.error) {
+      mostrarMensaje('error', asignacionResult.error);
+      return;
+    }
+
+    await refetch();
+    mostrarMensaje('success', asignacionResult.message || 'Tarea compartida correctamente.');
     setEmail('');
   };
 
@@ -49,27 +61,19 @@ function ShareTarea({ isOpen, onClose, tareaId }) {
 
         <h3 className={style.share_title}>Compartir tarea</h3>
 
-        <form className={style.share_form} onSubmit={onSubmit}>
-          <input
-            className={style.share_form_input}
-            type="email"
-            name="email"
-            id="email"
-            placeholder="ejemplo@gmail.com"
-            autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+        <form role='form' className={style.share_form} onSubmit={onSubmit}>
+          <input className={style.share_form_input} type="email" name="email" id="email" placeholder="ejemplo@gmail.com" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
           <input className={style.share_form_input_btn} type="submit" value="Compartir" disabled={loading || loadingUsuario} />
         </form>
+        {(loading || loadingUsuario || loadingUsuarios) && <p>Cargando...</p>}
 
-        {userError && <p className={style.error}>{userError}</p>}
-        {asignarError && <p className={style.error}>{asignarError}</p>}
-        {errorUsuarios && <p className={style.error}>{errorUsuarios}</p>}
-        {(loading || loadingUsuario) && <p>Cargando...</p>}
-        {successMessage && <p className={style.success}>{successMessage}</p>}
-        {data?.message && <p className={style.success}>{data.message}</p>}
+        {mensaje.texto && (
+          <p className={mensaje.tipo === 'error' ? style.error : style.success}>
+            {mensaje.texto}
+          </p>
+        )}
+
+        {errorUsuarios && mostrarMensaje('error', errorUsuarios)}
 
         <h4 className={style.share_subtitle}>Personas con las que compartiste esta tarea</h4>
         <ul className={style.share_list}>
@@ -85,5 +89,6 @@ function ShareTarea({ isOpen, onClose, tareaId }) {
   );
 }
 
-export default ShareTarea;
+export default ShareTarea
+
 

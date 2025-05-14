@@ -4,6 +4,7 @@ import connectDB from './src/config/database.js'
 import cors from 'cors'
 import tareaRoutes from './src/routes/tarea.routes.js'
 import usuarioRoutes from './src/routes/usuario.routes.js'
+import notificaciones from './src/routes/notificaciones.routes.js'
 const app = express();
 const port = 3000
 
@@ -18,6 +19,7 @@ app.use(express.json());
 
 app.use('/api/tareas', tareaRoutes)
 app.use('/api/usuario', usuarioRoutes)
+app.use('/api/notificaciones', notificaciones)
 
 app.get('/', (req, res) => {
     res.json({ 'message': `Hello the server` })

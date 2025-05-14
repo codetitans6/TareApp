@@ -1,5 +1,7 @@
 import tareaService from '../services/tarea.service.js'
-
+import Tarea from '../models/tarea.model.js';
+import Notificacion from '../models/notificacion.model.js';
+import Usuario from '../models/usuario.model.js'
 const crearTarea = async (req, res) => {
   try {
     const tarea = await tareaService.crearTarea(req.body);
@@ -33,30 +35,54 @@ const getTareaById = async (req, res) => {
   }
 };
 
-const updateTarea = async (req, res) => {
-  const { id } = req.params
-  const data = req.body
+
+const eliminarTarea = async (req, res) => {
+  const { id } = req.params;
+
   try {
-    const updatedTarea = await tareaService.updateTarea(id, data)
-    res.status(200).json(updatedTarea)
-  } catch (error) {
-    console.error(error)
-    res.status(500).json({ error: 'Error al actualizar la tarea' })
-  }
-}
-const addUsuariosTarea = async (req, res) => {
-  const { tareaId, creadorId, usuarioId } = req.body;
-  try {
-    const result = await tareaService.addUsuariosTarea(tareaId, creadorId, usuarioId);
-    if (result.error) {
-      return res.status(400).json({ error: result.error.error });
+    const tarea = await tareaService.eliminarTarea(id);
+
+    if (!tarea) {
+      return res.status(404).json({ mensaje: 'Tarea no encontrada' });
     }
-    return res.status(200).json(result)
+
+    res.status(200).json({ mensaje: 'Tarea eliminada correctamente' });
   } catch (error) {
-    console.error('Error en controller addUsuariosTarea:', error);
-    res.status(500).json({ error: 'Error al asignar la tarea' });
+    res.status(500).json({ mensaje: 'Error al eliminar tarea' });
   }
 };
+
+const updateTarea = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const nuevaData = req.body;
+
+    const tareaActual = await Tarea.findById(id);
+    if (!tareaActual) {
+      return res.status(404).json({ error: 'Tarea no encontrada' });
+    }
+
+    const anteriores = new Set(tareaActual.usuarios.map(u => u.toString()));
+    const nuevos = (nuevaData.usuarios || []).filter(u => !anteriores.has(u));
+    const creador = await Usuario.findById(tareaActual.creador).select("nombre");
+    const tareaActualizada = await tareaService.updateTarea(id, nuevaData);
+
+    if (nuevos.length > 0) {
+      const notificaciones = nuevos.map(userId => ({
+        usuario: userId,
+        mensaje: `${creador.nombre} te ha asignado la tarea: ${tareaActualizada.titulo}`,
+        tarea: tareaActualizada._id,
+      }));
+      await Notificacion.insertMany(notificaciones);
+    }
+
+    res.status(200).json(tareaActualizada);
+  } catch (error) {
+    console.error('Error en updateTarea:', error);
+    res.status(500).json({ error: 'Error al actualizar la tarea' });
+  }
+};
+
 
 const getUsuarioId = async (req, res) => {
   const { correo } = req.params
@@ -68,8 +94,8 @@ const getUsuarioId = async (req, res) => {
     res.status(500).json({ error: 'Error al obtener id de usuario' })
   }
 }
-const getUsuariosInTarea = async(req, res) => {
-  const {tareaId} = req.params
+const getUsuariosInTarea = async (req, res) => {
+  const { tareaId } = req.params
   try {
     const usuarios = await tareaService.getUsuariosInTarea(tareaId)
     res.status(200).json(usuarios)
@@ -98,9 +124,8 @@ export default {
   getAllUserTareas,
   getTareaById,
   updateTarea,
-  addUsuariosTarea,
   getUsuarioId,
   getUsuariosInTarea,
-  completarTarea
-
+  completarTarea,
+  eliminarTarea
 }
