@@ -4,7 +4,7 @@ import useTareas from '../../hooks/useTareas';
 import { Tooltip } from 'react-tooltip'
 import { useState } from 'react';
 import ShareTarea from '../../components/ShareTarea/ShareTarea';
-import tarea from '../../../../server/src/models/tarea.model';
+
 function Tareas() {
     const completarTarea = async (id) => {
         try {
