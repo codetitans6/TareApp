@@ -1,5 +1,5 @@
 const API_URL = 'http://localhost:3000/api/tareas'
-
+const NOTIFICACIONES_API = 'http://localhost:3000/api/notificaciones';
 
 export const crearTarea = async (tareaData) => {
     const res = await fetch(API_URL, {
@@ -60,7 +60,8 @@ export const asignarUsuarios = async (tareaId, creadorId, usuarioId) => {
         if (tarea.creador !== creadorId) {
             return { error: 'No tienes permisos para editar esta tarea' };
         }
-        if (tarea.creador === creadorId) {
+        console.log("CREADOR" + tarea.creador + "USUARIO: " + usuarioId)
+        if (tarea.creador === usuarioId) {
             return { error: 'No puedes asignarte tu propia tarea' };
         }
         const usuariosActuales = tarea.usuarios || [];
@@ -123,3 +124,16 @@ export const getUsuariosInTarea = async (tareaId) => {
     }
     return res.json()
 }
+export const marcarNotificacionComoLeida = async (id) => {
+    const res = await fetch(`${NOTIFICACIONES_API}/${id}/leida`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message || 'Error al marcar la notificación como leída');
+    }
+
+    return res.json();
+};
